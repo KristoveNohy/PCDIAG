@@ -7,3 +7,12 @@ def getCPUname():
         return cpu_name
     except Exception as e:
         return f"Chyba pri čítaní registra: {e}"
+    
+
+def scale_bytes(bytes, suffix="B"):
+    factor = 1024
+
+    for unit in [" ", "K", "M", "G", "T"]:
+        if bytes < factor:
+            return f"{bytes:.2f} {unit}{suffix}"
+        bytes /= factor
