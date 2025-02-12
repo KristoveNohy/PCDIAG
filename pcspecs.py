@@ -1,5 +1,6 @@
 import psutil
-import platform, sys, GPUtil
+import platform, sys
+import pyopencl as cl
 from myfunctions import *
 
 
@@ -17,16 +18,6 @@ class ram:
 
     def get_available(): return scale_bytes(psutil.virtual_memory().available)
 
-class gpu:
-    gpus = GPUtil.getGPUs()
-    for gpu in gpus:
-        print(f"Name: {gpu.name}")
-        print(f"Total Memory: {gpu.memoryTotal} MB")
-        print(f"Free Memory: {gpu.memoryFree} MB")
-        print(f"Used Memory: {gpu.memoryUsed} MB")
-        print(f"Load: {gpu.load * 100:.2f}%")
-        print(f"Temperature: {gpu.temperature} °C")
-        print("-" * 30)
 
 class software:
     system = platform.system()
@@ -37,4 +28,11 @@ class software:
 print()
 
 
-print(software.release)
+platforms = cl.get_platforms()
+for plat in platforms:
+    print(f"Platforma: {plat.name}")
+    for device in plat.get_devices():
+        print(f"  Zariadenie: {device.name}")
+        print(f"  Typ: {device.type}")
+        print(f"  VRAM: {scale_bytes(device.global_mem_size)}")
+        print(f"  Výpočtové jednotky: {device.max_compute_units}")
