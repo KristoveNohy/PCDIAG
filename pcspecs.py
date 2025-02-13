@@ -19,6 +19,8 @@ class ram:
     def get_available(): return scale_bytes(psutil.virtual_memory().available)
 
 
+
+
 class software:
     system = platform.system()
     release = platform.release()
@@ -36,3 +38,4 @@ for plat in platforms:
         print(f"  Typ: {device.type}")
         print(f"  VRAM: {scale_bytes(device.global_mem_size)}")
         print(f"  Výpočtové jednotky: {device.max_compute_units}")
+        print(device)
