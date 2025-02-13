@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>796</width>
+    <height>590</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>701</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>731</width>
+      <height>481</height>
+     </size>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="vlastnosti">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <attribute name="title">
+      <string>vlastnosti PC</string>
+     </attribute>
+     <widget class="QGroupBox" name="GBoxGPU">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>260</y>
+        <width>651</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Grafické Karty</string>
+      </property>
+      <widget class="QWidget" name="horizontalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>43</y>
+         <width>511</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="OUTGPUlayout">
+        <item>
+         <layout class="QFormLayout" name="INGPUlayout1">
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>20</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="LVRAM">
+            <property name="text">
+             <string>VRAM kapacita: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="LCUDAcores">
+            <property name="text">
+             <string>Počet CUDA jadier:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="testlabel">
+            <property name="text">
+             <string>test</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QFormLayout" name="INGPUlayout2">
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>20</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="LCUDAcomputeCapablity">
+            <property name="text">
+             <string>cuda cumpute capability:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="LComputeUnits">
+            <property name="text">
+             <string>počet výpočtových jednotiek:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="formLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>641</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_8">
+        <item row="0" column="1">
+         <widget class="QLabel" name="LGPUname">
+          <property name="text">
+           <string>Nadpis</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QComboBox" name="comboGPU">
+          <item>
+           <property name="text">
+            <string>GPU #0</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>651</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="OUTPARAMS">
+       <item>
+        <widget class="QGroupBox" name="GBoxCPU">
+         <property name="title">
+          <string>Procesor</string>
+         </property>
+         <widget class="QWidget" name="verticalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>181</width>
+            <height>111</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="CPUlayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="LCPUname">
+             <property name="text">
+              <string>Intel Core i5-1235U</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="LLCPUlogC">
+             <property name="text">
+              <string>pocet logickych jadier:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="LCPUphysC">
+             <property name="text">
+              <string>Pocet fyzických jadier: </string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="LfreqCPU">
+             <property name="text">
+              <string>Frekvencia: </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="GBoxSW">
+         <property name="title">
+          <string>software</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <widget class="QWidget" name="verticalLayoutWidget_5">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>181</width>
+            <height>111</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="SWlayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="LCUDAsup">
+             <property name="text">
+              <string>podpora CUDA:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="LCUDAver">
+             <property name="text">
+              <string>verzia CUDA:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="LcuDNNsup">
+             <property name="text">
+              <string>podpora CUDNN:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="LcuDNNver">
+             <property name="text">
+              <string>verzia CUDNN:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="GBoxRAM">
+         <property name="title">
+          <string>Operačná Pamäť</string>
+         </property>
+         <widget class="QWidget" name="verticalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>171</width>
+            <height>111</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="RAMlayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="LRAMtotal">
+             <property name="text">
+              <string>Kapacita:  </string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="LRAMtype">
+             <property name="text">
+              <string>Typ: </string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="LRAMfreq">
+             <property name="text">
+              <string>Frekvencia:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="test">
+     <attribute name="title">
+      <string>testovanie</string>
+     </attribute>
+     <widget class="QGroupBox" name="GBoxtraining">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>401</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Benchmark treningu</string>
+      </property>
+      <widget class="QWidget" name="formLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>361</width>
+         <height>151</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="realtimelayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="Ldevice">
+          <property name="text">
+           <string>Zariadenie: </string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="combBDev">
+          <item>
+           <property name="text">
+            <string>CPU</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>GPU</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="Lcas">
+          <property name="text">
+           <string>čas: </string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="run">
+          <property name="text">
+           <string>Spustiť test</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="Lvysledok">
+          <property name="text">
+           <string>vysledok:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QProgressBar" name="progressBar">
+          <property name="value">
+           <number>24</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="GBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>220</y>
+        <width>401</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Inferenčný benchmark</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="hodnotenie">
+     <attribute name="title">
+      <string>hodnotenie</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>50</y>
+        <width>601</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="Gradelayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="LCPUgrade">
+         <property name="text">
+          <string>CPU známka:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="LGPUgrade">
+         <property name="text">
+          <string>GPU známka:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="LRAMgrade">
+         <property name="text">
+          <string>RAM známka:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="Lrecommend">
+         <property name="text">
+          <string>odporučanie:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="LtotalGrade">
+         <property name="text">
+          <string>Celkové hodnotenie PC:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="buttonGrade">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>400</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ohodnotiť</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="info">
+     <attribute name="title">
+      <string>informácie o programe</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>651</width>
+        <height>391</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="infolayout">
+       <item>
+        <widget class="QLabel" name="Linfo1">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tento program je mojou prácou pre Stredoškolskú odbornú činnosť, v kategorii hardware.&lt;/p&gt;&lt;p&gt;program má za úlohu získať kľúčové parametre počítača pre prácu s umelou inteligenciou&lt;/p&gt;&lt;p&gt;a na základe týchto parametrov program ohodnotí vhodnosť počítača.&lt;/p&gt;&lt;p&gt;program dokonca odporučí čo by bolo najlepšie vylepšiť pre PC.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Tak tiež môže uživateľ spustiť benchmarkový test ktorý spustí trenovanie modelu,&lt;/p&gt;&lt;p&gt;ResNet50 pomocou syntetického datasetu v nastavitelných velkostiach dát. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="Llicence">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>530</y>
+      <width>791</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Tento program je pod licenciou MIT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>796</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
