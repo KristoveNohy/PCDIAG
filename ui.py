@@ -163,9 +163,6 @@ class Ui_MainWindow:
         self.gpu_combo_box.addItem("GPU #0")
         self.gpu_grid_layout.addWidget(self.gpu_combo_box, 0, 0)
 
-        self.gpu_name_label = QtWidgets.QLabel(self.gpu_group_box)
-        self.gpu_name_label.setObjectName("gpu_name_label")
-        self.gpu_grid_layout.addWidget(self.gpu_name_label, 0, 1)
 
         # Layout pre GPU parametre
         gpu_params_layout = QtWidgets.QGridLayout()
@@ -175,6 +172,7 @@ class Ui_MainWindow:
         self.gpu_vram_label = QtWidgets.QLabel(self.gpu_group_box)
         self.gpu_vram_label.setObjectName("gpu_vram_label")
         gpu_params_layout.addWidget(self.gpu_vram_label, 0, 0)
+
 
         self.gpu_cuda_cores_label = QtWidgets.QLabel(self.gpu_group_box)
         self.gpu_cuda_cores_label.setObjectName("gpu_cuda_cores_label")
@@ -187,6 +185,10 @@ class Ui_MainWindow:
         self.gpu_compute_units_label = QtWidgets.QLabel(self.gpu_group_box)
         self.gpu_compute_units_label.setObjectName("gpu_compute_units_label")
         gpu_params_layout.addWidget(self.gpu_compute_units_label, 3, 0)
+
+        self.gpu_name_label = QtWidgets.QLabel(self.gpu_group_box)
+        self.gpu_name_label.setObjectName("gpu_name_label")
+        gpu_params_layout.addWidget(self.gpu_name_label, 4, 0)
 
         self.gpu_grid_layout.addLayout(gpu_params_layout, 1, 0, 1, 2)
         self.gpu_software_layout.addWidget(self.gpu_group_box)
@@ -209,37 +211,33 @@ class Ui_MainWindow:
         self.cudnn_support_label.setObjectName("cudnn_support_label")
         self.software_grid_layout.addWidget(self.cudnn_support_label, 2, 0)
 
-        self.opencl_label = QtWidgets.QLabel(self.software_group_box)
-        self.opencl_label.setObjectName("opencl_label")
-        self.software_grid_layout.addWidget(self.opencl_label, 3, 0)
-
         self.numpy_label = QtWidgets.QLabel(self.software_group_box)
         self.numpy_label.setObjectName("numpy_label")
-        self.software_grid_layout.addWidget(self.numpy_label, 4, 0)
+        self.software_grid_layout.addWidget(self.numpy_label, 3, 0)
 
         self.scipy_label = QtWidgets.QLabel(self.software_group_box)
         self.scipy_label.setObjectName("scipy_label")
-        self.software_grid_layout.addWidget(self.scipy_label, 5, 0)
+        self.software_grid_layout.addWidget(self.scipy_label, 4, 0)
 
         self.pandas_label = QtWidgets.QLabel(self.software_group_box)
         self.pandas_label.setObjectName("pandas_label")
-        self.software_grid_layout.addWidget(self.pandas_label, 6, 0)
+        self.software_grid_layout.addWidget(self.pandas_label, 5, 0)
 
         self.pytorch_label = QtWidgets.QLabel(self.software_group_box)
         self.pytorch_label.setObjectName("pytorch_label")
-        self.software_grid_layout.addWidget(self.pytorch_label, 7, 0)
+        self.software_grid_layout.addWidget(self.pytorch_label, 6, 0)
 
         self.tensorflow_label = QtWidgets.QLabel(self.software_group_box)
         self.tensorflow_label.setObjectName("tensorflow_label")
-        self.software_grid_layout.addWidget(self.tensorflow_label, 8, 0)
+        self.software_grid_layout.addWidget(self.tensorflow_label, 7, 0)
 
         self.torch_cuda_support_label = QtWidgets.QLabel(self.software_group_box)
         self.torch_cuda_support_label.setObjectName("torch_cuda_support_label")
-        self.software_grid_layout.addWidget(self.torch_cuda_support_label, 9, 0)
+        self.software_grid_layout.addWidget(self.torch_cuda_support_label, 8, 0)
 
         self.tensorflow_cuda_support_label = QtWidgets.QLabel(self.software_group_box)
         self.tensorflow_cuda_support_label.setObjectName("tensorflow_cuda_support_label")
-        self.software_grid_layout.addWidget(self.tensorflow_cuda_support_label, 10, 0)
+        self.software_grid_layout.addWidget(self.tensorflow_cuda_support_label, 9, 0)
 
         self.gpu_software_layout.addWidget(self.software_group_box)
 
@@ -386,7 +384,6 @@ class Ui_MainWindow:
         self.python_label.setText(_translate("MainWindow", "Python:"))
         self.cuda_support_label.setText(_translate("MainWindow", "CUDA:"))
         self.cudnn_support_label.setText(_translate("MainWindow", "CUDNN:"))
-        self.opencl_label.setText(_translate("MainWindow", "OpenCL:"))
         self.numpy_label.setText(_translate("MainWindow", "NumPy:"))
         self.scipy_label.setText(_translate("MainWindow", "SciPy:"))
         self.pandas_label.setText(_translate("MainWindow", "Pandas:"))

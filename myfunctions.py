@@ -1,4 +1,4 @@
-import winreg
+import winreg, subprocess, re
 from importlib.metadata import version, PackageNotFoundError
 def getCPUname():
     try:
@@ -23,19 +23,44 @@ def is_module_installed(module_name):
     try:
         return version(module_name)
     except PackageNotFoundError:
-        return f'nenajdený'
+        return f'nie je'
 
-def torch_with_cuda():
+
+def is_cuda():
     try:
-        import torch.cuda.is_available
-        if torch.cuda.is_available():
-            cuda_version = torch.version.cuda
-            device_count = torch.cuda.device_count()
-            device_name = torch.cuda.get_device_name(0) if device_count > 0 else "N/A"
-            print(f"CUDA je dostupná. Verzia: {cuda_version}, Počet GPU: {device_count}, Prvá GPU: {device_name}")
-        else:
-            print("CUDA nie je dostupná.")
-    except ImportError:
-        print("PyTorch nie je nainštalovaný.")
+        output = subprocess.check_output("nvidia-smi", shell=True, stderr=subprocess.STDOUT)
+        output = output.decode("utf-8")
+        # Hlada riadok obsahujúci "CUDA Version:"
+        match = re.search(r"CUDA Version:\s+([\d\.]+)", output)
+        if match:
+            return match.group(1)
+        return "nie je"
+    except Exception:
+        return "nie je"
 
-torch_with_cuda()
+def is_cudnn():
+    try:
+        import ctypes
+
+        cudnn = ctypes.cdll.LoadLibrary("cudnn.dll")
+       
+        cudnn_version = cudnn.cudnnGetVersion()
+        # Rozloží číslo do častí (predpokladám formát: major*1000 + minor*100 + patch)
+        major = cudnn_version // 1000
+        minor = (cudnn_version % 1000) // 100
+        patch = cudnn_version % 100
+        return f"{major}.{minor}.{patch}"
+    except Exception:
+        return "nie je"
+    
+def get_gpu_names():
+    gpu_names = []
+    try:
+        import wmi
+        c = wmi.WMI()
+        for gpu in c.Win32_VideoController():
+            gpu_names.append(gpu.Name)
+    except ImportError:
+        gpu_names.append("WMI modul nie je nainštalovaný")
+    return gpu_names
+
