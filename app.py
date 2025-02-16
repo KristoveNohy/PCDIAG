@@ -56,11 +56,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tensor_thread.quit()
         self.tensor_thread.wait()
 
-    def populate_gpu_combobox(self):
-        gpu_names = get_gpu_names()
-        self.ui.gpu_combo_box.clear()
-        for name in gpu_names:
-            self.ui.gpu_combo_box.addItem(name)
+    def populate_gpu_combobox(ui):
+        gpus = get_gpu_info()
+        ui.gpu_combo_box.clear()
+        for gpu in gpus:
+            ui.gpu_combo_box.addItem(gpu["name"])
+        return gpus
+    
+    def on_gpu_selection_changed(index, gpus, ui):
+        if 0 <= index < len(gpus):
+            gpu = gpus[index]
+            ui.gpu_name_label.setText(f"Názov: {gpu['name']}")
+            vram_gb = gpu['vram'] / (1024 ** 3)
+            ui.gpu_vram_label.setText(f"VRAM kapacita: {vram_gb:.2f} GB")
 
     def initHardwareDiagnostics(self):
         # Prvé načítanie údajov

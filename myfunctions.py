@@ -53,14 +53,14 @@ def is_cudnn():
     except Exception:
         return "nie je"
     
-def get_gpu_names():
-    gpu_names = []
-    try:
-        import wmi
-        c = wmi.WMI()
-        for gpu in c.Win32_VideoController():
-            gpu_names.append(gpu.Name)
-    except ImportError:
-        gpu_names.append("WMI modul nie je nainštalovaný")
-    return gpu_names
+def get_gpu_info():
+    import pyopencl as cl
+    gpus = []
+    for platform in cl.get_platforms():
+        for device in platform.get_devices(device_type=cl.device_type.GPU):
+            gpus.append({
+                "name": device.name,
+                "vram": device.global_mem_size  # VRAM v bajtoch
+            })
+    return gpus
 
