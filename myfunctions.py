@@ -113,7 +113,42 @@ def get_system_info():
                 "vram": device.global_mem_size  # VRAM v bajtoch
             })
 
+    if is_cuda()  != "nie je":
+        CUDA_CORES_PER_SM = {
+            3: 192,  # Kepler
+            5: 128,  # Maxwell
+            6: 64,   # Pascal
+            7: 64,   # Volta
+            75: 64,  # Turing
+            8: 128,  # Ampere
+            9: 128   # Lovelace
+        }
+
+
+        output = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=name,clocks.sm,multiprocessors", "--format=csv,noheader,nounits"],
+            encoding="utf-8"
+        )
+        lines = output.strip().split("\n")
+        
+
+        for index, line in enumerate(lines):
+            parts = line.split(", ")
+            name = parts[0]
+            sm_count = int(parts[2])  # Počet multiprocesorov
+
+            # Odhadneme počet CUDA jadier podľa známej architektúry
+            major_arch = int(sm_count / 10) if sm_count > 100 else sm_count  # Približný odhad architektúry
+            cores_per_sm = CUDA_CORES_PER_SM.get(major_arch, 64)  # Ak nepoznáme, použijeme default 64
+            total_cuda_cores = sm_count * cores_per_sm
+
+            info["gpu"][index].update({
+                "sm_count": sm_count,
+                "cuda_cores": total_cuda_cores
+            })
+
     return info
+
 def memtotext(num):
     match num:
         case 24:
