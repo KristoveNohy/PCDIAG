@@ -176,3 +176,5 @@ def memtotext(num):
         case default:
             return "Neznámy"
 print(get_system_info())
+
+

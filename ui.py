@@ -288,25 +288,51 @@ class Ui_MainWindow:
         self.device_label.setObjectName("device_label")
         self.test_method_grid_layout.addWidget(self.device_label, 0, 0)
 
-        self.run_test_button = QtWidgets.QPushButton(self.test_method_group_box)
-        self.run_test_button.setObjectName("run_test_button")
-        self.test_method_grid_layout.addWidget(self.run_test_button, 7, 0)
-
         self.device_combo_box = QtWidgets.QComboBox(self.test_method_group_box)
         self.device_combo_box.setObjectName("device_combo_box")
         self.device_combo_box.addItem("CPU")
         self.device_combo_box.addItem("GPU #0")
         self.test_method_grid_layout.addWidget(self.device_combo_box, 0, 2)
 
-        self.benchmark_combo_box = QtWidgets.QComboBox(self.test_method_group_box)
-        self.benchmark_combo_box.setObjectName("benchmark_combo_box")
-        self.benchmark_combo_box.addItem("Inferenčný benchmark")
-        self.benchmark_combo_box.addItem("treningový benchmark")
-        self.test_method_grid_layout.addWidget(self.benchmark_combo_box, 1, 2)
-
         self.benchmark_label = QtWidgets.QLabel(self.test_method_group_box)
         self.benchmark_label.setObjectName("benchmark_label")
         self.test_method_grid_layout.addWidget(self.benchmark_label, 1, 0)
+
+        self.benchmark_combo_box = QtWidgets.QComboBox(self.test_method_group_box)
+        self.benchmark_combo_box.setObjectName("benchmark_combo_box")
+        self.benchmark_combo_box.addItem("Inferenčný benchmark")
+        self.benchmark_combo_box.addItem("Tréningový benchmark")
+        self.test_method_grid_layout.addWidget(self.benchmark_combo_box, 1, 2)
+
+        # Pridanie spin box pre Batch size
+        self.batch_size_label = QtWidgets.QLabel(self.test_method_group_box)
+        self.batch_size_label.setObjectName("batch_size_label")
+        self.batch_size_label.setText("Batch velkosť:")
+        self.test_method_grid_layout.addWidget(self.batch_size_label, 2, 0)
+
+        self.batch_size_spin_box = QtWidgets.QSpinBox(self.test_method_group_box)
+        self.batch_size_spin_box.setObjectName("batch_size_spin_box")
+        self.batch_size_spin_box.setMinimum(1)
+        self.batch_size_spin_box.setMaximum(1024)
+        self.batch_size_spin_box.setValue(1)  # default hodnota, môžete zmeniť
+        self.test_method_grid_layout.addWidget(self.batch_size_spin_box, 2, 2)
+
+        # Pridanie spin box pre počet batchov
+        self.num_batches_label = QtWidgets.QLabel(self.test_method_group_box)
+        self.num_batches_label.setObjectName("num_batches_label")
+        self.num_batches_label.setText("Počet batchov:")
+        self.test_method_grid_layout.addWidget(self.num_batches_label, 3, 0)
+
+        self.num_batches_spin_box = QtWidgets.QSpinBox(self.test_method_group_box)
+        self.num_batches_spin_box.setObjectName("num_batches_spin_box")
+        self.num_batches_spin_box.setMinimum(1)
+        self.num_batches_spin_box.setMaximum(10000)
+        self.num_batches_spin_box.setValue(100)  # default hodnota, môžete zmeniť
+        self.test_method_grid_layout.addWidget(self.num_batches_spin_box, 3, 2)
+
+        self.run_test_button = QtWidgets.QPushButton(self.test_method_group_box)
+        self.run_test_button.setObjectName("run_test_button")
+        self.test_method_grid_layout.addWidget(self.run_test_button, 7, 0)
 
         self.export_results_button = QtWidgets.QPushButton(self.test_method_group_box)
         self.export_results_button.setEnabled(False)
@@ -401,11 +427,11 @@ class Ui_MainWindow:
         self.device_label.setText(_translate("MainWindow", "zariadenie:"))
         self.run_test_button.setText(_translate("MainWindow", "Spustiť test"))
         self.device_combo_box.setItemText(0, _translate("MainWindow", "CPU"))
-        self.device_combo_box.setItemText(1, _translate("MainWindow", "GPU #0"))
+        self.device_combo_box.setItemText(1, _translate("MainWindow", "CUDA (GPU)"))
         self.benchmark_combo_box.setItemText(0, _translate("MainWindow", "Inferenčný benchmark"))
         self.benchmark_combo_box.setItemText(1, _translate("MainWindow", "treningový benchmark"))
         self.benchmark_label.setText(_translate("MainWindow", "výber benchmarku:"))
-        self.export_results_button.setText(_translate("MainWindow", "exportovať výsledky do ..."))
+        self.export_results_button.setText(_translate("MainWindow", "exportovať výsledok"))
         self.results_group_box.setTitle(_translate("MainWindow", "výsledky"))
         self.elapsed_time_label.setText(_translate("MainWindow", "uplynulý čas:"))
         self.processed_items_label.setText(_translate("MainWindow", "Spracovaných prvkov:"))

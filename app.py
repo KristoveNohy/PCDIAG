@@ -18,10 +18,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         
-
+        self.ui.run_test_button.clicked.connect(self.run_test)
+        self.ui.export_results_button.clicked.connect(self.export_results)
         self.startWorkers()
+        self.start_usage_monitoring()
         self.initHardwareDiagnostics()
 
+##################################################
+######### VLASTNOSTI #############################
+##################################################
     def startWorkers(self):
         self.torch_thread = QtCore.QThread()
         self.tensor_thread = QtCore.QThread()
@@ -144,8 +149,157 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tensorflow_label.setText(f"TensorFlow: {is_module_installed("tensorflow")}")
         self.ui.torch_cuda_support_label.setText(f"Podpora Torch s CUDA: načítavam...")
         self.ui.tensorflow_cuda_support_label.setText("Podpora TensorFlow s CUDA: načítavam...")
+##################################################
+##################################################
+
+##################################################
+######## TESTOVANIE ##############################
+##################################################
+    def run_test(self) -> None:
+        self.test_type = self.ui.benchmark_combo_box.currentText()
+        benchmark_type = self.ui.benchmark_combo_box.currentIndex()
+        self.ui.run_test_button.setEnabled(False)
+        if benchmark_type == 0:
+            self.start_inference_test()
+        elif benchmark_type == 1:
+            self.start_training_test()
+        else:
+            QtWidgets.QMessageBox.warning(self, "Varovanie", "Neznámy typ benchmarku.")
+
+    def start_inference_test(self) -> None:
+        from benchmark import InferenceWorker
+        import torch
+        # Výber zariadenia
 
 
+        device_id = self.ui.device_combo_box.currentIndex()
+        self.device_name = self.ui.device_combo_box.currentText()
+        if device_id:
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            device = torch.device('cpu')
+
+        self.batch_size = self.ui.batch_size_spin_box.value()
+        self.num_batches = self.ui.num_batches_spin_box.value()
+
+        # Vytvorenie vlákna a workera pre inferenčný test
+        self.inference_thread = QtCore.QThread()
+        self.inference_worker = InferenceWorker(self.batch_size, self.num_batches, device)
+        self.inference_worker.moveToThread(self.inference_thread)
+
+        self.inference_thread.started.connect(self.inference_worker.run)
+        self.inference_worker.progress.connect(self.update_inference_stats)
+        self.inference_worker.logMessage.connect(self.log_message)
+        self.inference_worker.finished.connect(self.on_inference_finished)
+        self.inference_worker.finished.connect(self.inference_thread.quit)
+        self.inference_worker.finished.connect(self.inference_worker.deleteLater)
+        self.inference_thread.finished.connect(self.inference_thread.deleteLater)
+
+        self.inference_thread.start()
+
+    def update_inference_stats(self, processed, elapsed, avg_batch_time, fps) -> None:
+        self.ui.elapsed_time_label.setText(f"uplynutý čas: {elapsed:.4f} s")
+        self.ui.processed_items_label.setText(f"spracované batche: {processed}")
+        self.ui.average_time_label.setText(f"pomer čas/batch: {avg_batch_time:.4f} s")
+        self.ui.fps_label.setText(f"FPS: {fps:.2f}")
+
+    def on_inference_finished(self, result_msg: str) -> None:
+        self.ui.run_test_button.setEnabled(True)
+        self.ui.export_results_button.setEnabled(True)
+        QtWidgets.QMessageBox.information(self, "Výsledky inferenčného testu", result_msg)
+
+
+    def start_training_test(self) -> None:
+        from benchmark import TrainingWorker
+        import torch
+        self.ui.run_test_button.setEnabled(False)
+        self.device_name = device_text = self.ui.device_combo_box.currentText()
+        if device_text.startswith("GPU"):
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            device = torch.device('cpu')
+
+        self.batch_size = self.ui.batch_size_spin_box.value()
+        self.num_batches = self.ui.num_batches_spin_box.value()
+
+        self.training_thread = QtCore.QThread()
+        self.training_worker = TrainingWorker(self.batch_size, self.num_batches, device)
+        self.training_worker.moveToThread(self.training_thread)
+
+        self.training_thread.started.connect(self.training_worker.run)
+        self.training_worker.progress.connect(self.update_training_stats)
+        self.training_worker.logMessage.connect(self.log_message)
+        self.training_worker.finished.connect(self.on_training_finished)
+        self.training_worker.finished.connect(self.training_thread.quit)
+        self.training_worker.finished.connect(self.training_worker.deleteLater)
+        self.training_thread.finished.connect(self.training_thread.deleteLater)
+
+        self.training_thread.start()
+
+    def update_training_stats(self, processed, elapsed, avg_batch_time) -> None:
+        self.ui.elapsed_time_label.setText(f"uplynutý čas: {elapsed:.4f} s")
+        self.ui.processed_items_label.setText(f"spracované batche: {processed}")
+        self.ui.average_time_label.setText(f"pomer čas/batch: {avg_batch_time:.4f} s")
+        self.ui.fps_label.setText("")
+    
+    def on_training_finished(self, result_msg: str) -> None:
+        self.ui.run_test_button.setEnabled(True)
+        self.ui.export_results_button.setEnabled(True)
+        QtWidgets.QMessageBox.information(self, "Výsledky tréningového testu", result_msg)
+        self.log_message(result_msg)
+
+    def log_message(self, message: str) -> None:
+        # Jednoduché logovanie do konzoly – môžete rozšíriť o logovanie do textového poľa
+        print(message)
+
+    # Spustenie vlákna pre monitorovanie využitia systémových zdrojov
+    def start_usage_monitoring(self) -> None:
+        self.usage_thread = QtCore.QThread()
+        self.usage_worker = UsageWorker(interval=1.0)
+        self.usage_worker.moveToThread(self.usage_thread)
+        self.usage_thread.started.connect(self.usage_worker.run)
+        self.usage_worker.usageUpdated.connect(self.update_usage_stats)
+        self.usage_thread.start()
+
+    def update_usage_stats(self, cpu, ram, gpu, vram) -> None:
+        self.ui.cpu_usage_label.setText(f"CPU usage: {cpu:.1f}%")
+        self.ui.ram_usage_label.setText(f"RAM usage: {ram:.1f}%")
+        self.ui.gpu_usage_label.setText(f"GPU usage: {gpu:.1f}%")
+        self.ui.vram_usage_label.setText(f"VRAM usage: {vram:.1f}%")
+
+    def export_results(self) -> None:
+        """
+        Exportuje aktuálne výsledky z labelov do textového súboru.
+        """
+        # Získajte texty výsledkov
+        results_text = (
+            f"{self.test_type}\n"
+            f"zariadenie: {self.device_name}\n"
+            f"velkost batchu: {self.batch_size}\n"
+            f"pocet batchov: {self.num_batches}\n\n"
+            f"{self.ui.elapsed_time_label.text()}\n"
+            f"{self.ui.processed_items_label.text()}\n"
+            f"{self.ui.average_time_label.text()}\n"
+            f"{self.ui.fps_label.text()}\n"
+        )
+
+        # Otvorte dialóg pre uloženie súboru
+        options = QtWidgets.QFileDialog.Options()
+        file_name, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self,
+            "Exportovať výsledky",
+            "",
+            "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)",
+            options=options
+        )
+        
+        if file_name:
+            try:
+                with open(file_name, "w", encoding="utf-8") as file:
+                    file.write(results_text)
+                QtWidgets.QMessageBox.information(self, "Export", "Výsledky boli úspešne exportované.")
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Chyba", f"Export sa nepodaril: {e}")
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
