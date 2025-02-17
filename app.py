@@ -262,10 +262,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.usage_thread.start()
 
     def update_usage_stats(self, cpu, ram, gpu, vram) -> None:
-        self.ui.cpu_usage_label.setText(f"CPU usage: {cpu:.1f}%")
-        self.ui.ram_usage_label.setText(f"RAM usage: {ram:.1f}%")
-        self.ui.gpu_usage_label.setText(f"GPU usage: {gpu:.1f}%")
-        self.ui.vram_usage_label.setText(f"VRAM usage: {vram:.1f}%")
+        self.ui.cpu_usage_label.setText(f"využitie CPU: {cpu:.1f}%")
+        self.ui.ram_usage_label.setText(f"využitie RAM: {ram:.1f}%")
+        self.ui.gpu_usage_label.setText(f"využitie GPU: {gpu:.1f}%")
+        self.ui.vram_usage_label.setText(f"využitie VRAM: {vram:.1f}%")
 
     def export_results(self) -> None:
         """
