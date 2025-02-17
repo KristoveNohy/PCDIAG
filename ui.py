@@ -186,9 +186,9 @@ class Ui_MainWindow:
         self.gpu_compute_units_label.setObjectName("gpu_compute_units_label")
         gpu_params_layout.addWidget(self.gpu_compute_units_label, 3, 0)
 
-        self.gpu_name_label = QtWidgets.QLabel(self.gpu_group_box)
-        self.gpu_name_label.setObjectName("gpu_name_label")
-        gpu_params_layout.addWidget(self.gpu_name_label, 4, 0)
+        self.gpu_driver_version = QtWidgets.QLabel(self.gpu_group_box)
+        self.gpu_driver_version.setObjectName("gpu_driver_version")
+        gpu_params_layout.addWidget(self.gpu_driver_version, 4, 0)
 
         self.gpu_grid_layout.addLayout(gpu_params_layout, 1, 0, 1, 2)
         self.gpu_software_layout.addWidget(self.gpu_group_box)
@@ -375,7 +375,7 @@ class Ui_MainWindow:
         self.ram_freq_label.setText(_translate("MainWindow", "Frekvencia:"))
         self.gpu_group_box.setTitle(_translate("MainWindow", "Grafické Karty"))
         self.gpu_combo_box.setItemText(0, _translate("MainWindow", "GPU #0"))
-        self.gpu_name_label.setText(_translate("MainWindow", "Názov:"))
+        self.gpu_driver_version.setText(_translate("MainWindow", "Názov:"))
         self.gpu_vram_label.setText(_translate("MainWindow", "VRAM kapacita:"))
         self.gpu_cuda_cores_label.setText(_translate("MainWindow", "Pocet CUDA jadier:"))
         self.gpu_cuda_capability_label.setText(_translate("MainWindow", "CUDA compute capability:"))

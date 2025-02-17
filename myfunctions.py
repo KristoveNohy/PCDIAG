@@ -90,9 +90,12 @@ def get_system_info():
     for disk in w.Win32_DiskDrive():
         info["storage"].append({
             "model": disk.Model,
-            "size_gb": int(disk.Size) / (1024**3),
             "interface": disk.InterfaceType,
-            "media_type": "SSD/HDD"
+            "serial_number": disk.SerialNumber.strip(),
+            "size_gb": int(disk.Size) / (1024**3),
+            "media_type": disk.MediaType,
+            "firmware_version": disk.FirmwareRevision,
+            "rpm": disk.SpindleSpeed if hasattr(disk, "SpindleSpeed") else "N/A"
         })
 
 
@@ -100,7 +103,10 @@ def get_system_info():
     for gpu in w.Win32_VideoController():
         info["gpu"].append({
             "name": gpu.Name,
-            "driver_version": gpu.DriverVersion
+            "driver_version": gpu.DriverVersion,
+            "sm_count": "Nemožno zistiť",
+            "cuda_cores": "Nemožno zistiť",
+            "cuda_cp": "Nemožno zistiť"
         })
     import pyopencl as cl
     for platform in cl.get_platforms():
@@ -145,7 +151,15 @@ def get_system_info():
             info["gpu"][index].update({
                 "sm_count": sm_count,
                 "cuda_cores": total_cuda_cores
+                
             })
+            try:
+                import pycuda.driver
+                info["gpu"][index].update({
+                    "cuda_cp": pycuda.driver.Device(index).compute_capability(),
+                })
+            except Exception:
+                pass
 
     return info
 

@@ -62,19 +62,39 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_gpu_selection_changed(self):
         index = self.ui.gpu_combo_box.currentIndex()
         if 0 <= index < len(self.system["gpu"]):
-            print(index)
             gpu = self.system["gpu"][index]
-            self.ui.gpu_name_label.setText(f"Názov: {gpu['name']}")
+            self.ui.gpu_driver_version.setText(f"Verzia ovládača: {gpu['driver_version']}")
+            self.ui.gpu_cuda_cores_label.setText(f"Počet CUDA jadier: {gpu['cuda_cores']}")
+            self.ui.gpu_cuda_capability_label.setText(f"CUDA compute Capability: {gpu['cuda_cp']}")
             vram_gb = gpu['vram'] / (1024 ** 3)
             self.ui.gpu_compute_units_label.setText(f"počet výpočtových jednotiek {gpu["CU"]}")
             self.ui.gpu_vram_label.setText(f"VRAM kapacita: {vram_gb:.2f} GB")
 
+
+    def populate_storage_combobox(self):
+        self.ui.storage_combo_box.clear()
+        for disk in self.system["storage"]:
+            self.ui.storage_combo_box.addItem(disk["model"])
+
+    def on_storage_selection_changed(self):
+        index = self.ui.storage_combo_box.currentIndex()
+        if 0 <= index < len(self.system["storage"]):
+            disk = self.system["storage"][index]
+            self.ui.storage_capacity_label.setText(f"Kapacita: {disk["size_gb"]:.2f} GB")
+            self.ui.storage_read_label.setText(f"Rozhranie: {disk["interface"]}")
+            self.ui.storage_write_label.setText(f"RPM: {disk["rpm"]}")
+            self.ui.storage_type_label.setText(f"Typ: {disk["media_type"]}")
+
+            
     def initHardwareDiagnostics(self):
         # Prvé načítanie údajov
         self.system = get_system_info()
         self.populate_gpu_combobox()
+        self.populate_storage_combobox()
         self.ui.gpu_combo_box.currentIndexChanged.connect(self.on_gpu_selection_changed)
+        self.ui.storage_combo_box.currentIndexChanged.connect(self.on_storage_selection_changed)
 
+        self.on_storage_selection_changed()
         self.on_gpu_selection_changed()
         self.updateHardwareInfo()
         # Timer na periodickú aktualizáciu každých 5 sekúnd
@@ -91,10 +111,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.cpu_freq_label.setText(f"Frekvencia: {freq_str}")
 
         # Úložisko - výpočet rýchlosti čítania a zápisu
-        disk = psutil.disk_usage('/')
-        total_gb = disk.total / (1024 ** 3)
-        self.ui.storage_capacity_label.setText(f"Kapacita: {total_gb:.2f} GB")
-        self.ui.storage_type_label.setText("Typ uložiska: SSD/HD")  # placeholder
+        # disk = psutil.disk_usage('/')
+        # total_gb = disk.total / (1024 ** 3)
+        # self.ui.storage_capacity_label.setText(f"Kapacita: {total_gb:.2f} GB")
+        # self.ui.storage_type_label.setText("Typ uložiska: SSD/HD")  # placeholder
 
         # Operačná pamäť
         mem = psutil.virtual_memory()
