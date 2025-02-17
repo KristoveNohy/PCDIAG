@@ -130,36 +130,38 @@ def get_system_info():
             9: 128   # Lovelace
         }
 
+        try:
+            output = subprocess.check_output(
+                ["nvidia-smi", "--query-gpu=name,clocks.sm,multiprocessors", "--format=csv,noheader,nounits"],
+                encoding="utf-8"
+            )
+            lines = output.strip().split("\n")
+            
 
-        output = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=name,clocks.sm,multiprocessors", "--format=csv,noheader,nounits"],
-            encoding="utf-8"
-        )
-        lines = output.strip().split("\n")
-        
+            for index, line in enumerate(lines):
+                parts = line.split(", ")
+                name = parts[0]
+                sm_count = int(parts[2])  # Počet multiprocesorov
 
-        for index, line in enumerate(lines):
-            parts = line.split(", ")
-            name = parts[0]
-            sm_count = int(parts[2])  # Počet multiprocesorov
+                # Odhadneme počet CUDA jadier podľa známej architektúry
+                major_arch = int(sm_count / 10) if sm_count > 100 else sm_count  # Približný odhad architektúry
+                cores_per_sm = CUDA_CORES_PER_SM.get(major_arch, 64)  # Ak nepoznáme, použijeme default 64
+                total_cuda_cores = sm_count * cores_per_sm
 
-            # Odhadneme počet CUDA jadier podľa známej architektúry
-            major_arch = int(sm_count / 10) if sm_count > 100 else sm_count  # Približný odhad architektúry
-            cores_per_sm = CUDA_CORES_PER_SM.get(major_arch, 64)  # Ak nepoznáme, použijeme default 64
-            total_cuda_cores = sm_count * cores_per_sm
-
-            info["gpu"][index].update({
-                "sm_count": sm_count,
-                "cuda_cores": total_cuda_cores
-                
-            })
-            try:
-                import pycuda.driver
                 info["gpu"][index].update({
-                    "cuda_cp": pycuda.driver.Device(index).compute_capability(),
+                    "sm_count": sm_count,
+                    "cuda_cores": total_cuda_cores
+                    
                 })
-            except Exception:
-                pass
+        except Exception:
+            pass
+        try:
+            import pycuda.driver
+            info["gpu"][index].update({
+                "cuda_cp": pycuda.driver.Device(index).compute_capability(),
+            })
+        except Exception:
+            pass
 
     return info
 
