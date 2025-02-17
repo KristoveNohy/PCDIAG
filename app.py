@@ -17,9 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        # Inicializácia pre diskové I/O
-        self.last_disk_io = psutil.disk_io_counters()
-        self.last_disk_time = time.time()
+        
 
         self.startWorkers()
         self.initHardwareDiagnostics()
@@ -56,37 +54,40 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tensor_thread.quit()
         self.tensor_thread.wait()
 
-    def populate_gpu_combobox(ui):
-        gpus = get_gpu_info()
-        ui.gpu_combo_box.clear()
-        for gpu in gpus:
-            ui.gpu_combo_box.addItem(gpu["name"])
-        return gpus
+    def populate_gpu_combobox(self):
+        self.ui.gpu_combo_box.clear()
+        for gpu in self.system["gpu"]:
+            self.ui.gpu_combo_box.addItem(gpu["name"])
     
-    def on_gpu_selection_changed(index, gpus, ui):
-        if 0 <= index < len(gpus):
-            gpu = gpus[index]
-            ui.gpu_name_label.setText(f"Názov: {gpu['name']}")
+    def on_gpu_selection_changed(self):
+        index = self.ui.gpu_combo_box.currentIndex()
+        if 0 <= index < len(self.system["gpu"]):
+            print(index)
+            gpu = self.system["gpu"][index]
+            self.ui.gpu_name_label.setText(f"Názov: {gpu['name']}")
             vram_gb = gpu['vram'] / (1024 ** 3)
-            ui.gpu_vram_label.setText(f"VRAM kapacita: {vram_gb:.2f} GB")
+            self.ui.gpu_compute_units_label.setText(f"počet výpočtových jednotiek {gpu["CU"]}")
+            self.ui.gpu_vram_label.setText(f"VRAM kapacita: {vram_gb:.2f} GB")
 
     def initHardwareDiagnostics(self):
         # Prvé načítanie údajov
+        self.system = get_system_info()
         self.populate_gpu_combobox()
+        self.ui.gpu_combo_box.currentIndexChanged.connect(self.on_gpu_selection_changed)
+
+        self.on_gpu_selection_changed()
         self.updateHardwareInfo()
         # Timer na periodickú aktualizáciu každých 5 sekúnd
         
 
     def updateHardwareInfo(self):
         # CPU diagnostika
-        cpu_logical = psutil.cpu_count(logical=True)
-        cpu_physical = psutil.cpu_count(logical=False)
         cpu_freq = psutil.cpu_freq()
         freq_str = f"{cpu_freq.current:.2f} MHz" if cpu_freq else "N/A"
-        cpu_name = getCPUname() or "N/A"
+        cpu_name = self.system["cpu"]["name"] or "N/A"
         self.ui.cpu_name_label.setText(f"CPU: {cpu_name}")
-        self.ui.cpu_logical_label.setText(f"Pocet logickych jadier: {cpu_logical}")
-        self.ui.cpu_physical_label.setText(f"Pocet fyzických jadier: {cpu_physical}")
+        self.ui.cpu_logical_label.setText(f"Pocet logickych jadier: {self.system["cpu"]["logical_processors"]}")
+        self.ui.cpu_physical_label.setText(f"Pocet fyzických jadier: {self.system["cpu"]["cores"]}")
         self.ui.cpu_freq_label.setText(f"Frekvencia: {freq_str}")
 
         # Úložisko - výpočet rýchlosti čítania a zápisu
@@ -99,17 +100,18 @@ class MainWindow(QtWidgets.QMainWindow):
         mem = psutil.virtual_memory()
         total_ram_gb = mem.total / (1024 ** 3)
         self.ui.ram_total_label.setText(f"Kapacita: {total_ram_gb:.2f} GB")
-        self.ui.ram_channels_label.setText("Pocet kanalov: N/A")
-        self.ui.ram_type_label.setText("Typ: DDR4")  # placeholder
-        self.ui.ram_freq_label.setText("Frekvencia: N/A")
+        self.ui.ram_channels_label.setText(f"Pocet RAM : {len(self.system["ram"])}" )
+        memtype = memtotext(self.system["ram"][0]["type"])
+        self.ui.ram_type_label.setText(f"Typ: {memtype}")
+        self.ui.ram_freq_label.setText(f"Frekvencia: {self.system["ram"][0]["speed_mhz"]}")
 
         # GPU diagnostika
         
-        self.ui.gpu_name_label.setText("N/A")
-        self.ui.gpu_vram_label.setText("VRAM kapacita: N/A")
-        self.ui.gpu_cuda_cores_label.setText("Pocet CUDA jadier: N/A")
-        self.ui.gpu_cuda_capability_label.setText("CUDA compute capability: N/A")
-        self.ui.gpu_compute_units_label.setText("Počet výpočtových jednotiek: N/A")
+        # self.ui.gpu_name_label.setText("N/A")
+        # self.ui.gpu_vram_label.setText("VRAM kapacita: N/A")
+        # self.ui.gpu_cuda_cores_label.setText("Pocet CUDA jadier: N/A")
+        # self.ui.gpu_cuda_capability_label.setText("CUDA compute capability: N/A")
+        # self.ui.gpu_compute_units_label.setText("Počet výpočtových jednotiek: N/A")
 
         # Software diagnostika
         self.ui.python_label.setText(f"Python: {platform.python_version()}")

@@ -391,7 +391,7 @@ class Ui_MainWindow:
         self.tensorflow_label.setText(_translate("MainWindow", "TensorFlow:"))
         self.torch_cuda_support_label.setText(_translate("MainWindow", "Podpora Torch s CUDA:"))
         self.tensorflow_cuda_support_label.setText(_translate("MainWindow", "Podpora TensorFlow s CUDA:"))
-        self.tab_widget.setTabText(self.tab_widget.indexOf(self.pc_properties_tab), _translate("MainWindow", "Vlastnosti PC"))
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.pc_properties_tab), _translate("MainWindow", "Diagnostika PC"))
         self.load_group_box.setTitle(_translate("MainWindow", "zataženie"))
         self.cpu_usage_label.setText(_translate("MainWindow", "Využitie CPU:"))
         self.gpu_usage_label.setText(_translate("MainWindow", "Využitie GPU:"))
